@@ -1,0 +1,241 @@
+---
+import BaseHead from "../components/BaseHead.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import RightSidebar from "../components/RightSidebar/RightSidebar.astro";
+import TableOfContents from "../components/RightSidebar/TableOfContents";
+// import Image from "@astrojs/image";
+import { Debug } from 'astro/components';
+
+export interface Props {
+	content: {
+		title: string;
+		description: string;
+		pubDate?: string;
+		updatedDate?: string;
+		heroImage?: string;
+		minutesRead: string; };
+	headings: {
+		depth: number;
+		slug: string;
+		text: string;
+	}[];
+	hideRightSidebar?: boolean;
+}
+
+const {
+	content: { title, description, pubDate, updatedDate, heroImage, minutesRead, },
+	headings,
+	hideRightSidebar = false
+} = Astro.props;
+
+---
+
+<html lang="en">
+	<head>
+		<BaseHead title={title} description={description} />
+		<style>
+			.paper {
+				@apply 
+					bg-slate-50
+					dark:bg-slate-800
+					py-8
+					rounded-md
+					shadow-md
+					-mt-14
+					;
+			}
+			.sidebar {
+				position: fixed;
+				top: 0;
+				bottom: 0;
+				padding: 0;
+			}
+			#left-sidebar {
+				display: none;
+				background: var(--theme-bg-gradient);
+				z-index: 10;
+				inset-inline-start: 0;
+			}
+			#right-sidebar {
+				display: none;
+				top: var(--theme-navbar-height);
+				inset-inline-end: 0;
+				width: var(--theme-right-sidebar-width);
+			}
+			#main-content {
+				display: flex;
+				flex-direction: column;
+				height: 100%;
+				min-width: 0;
+			}
+			/* Allow showing left sidebar as an overlay, but only while viewport stays narrow */
+			@media not screen and (min-width: 50em) {
+				/* Make the left sidebar visible and fill the entire viewport below the navbar */
+				:global(.mobile-sidebar-toggle #left-sidebar) {
+					display: block;
+					top: var(--theme-navbar-height);
+					inset-inline-end: 0;
+				}
+				/*
+					Try to prevent the rest of the page from scrolling,
+					and the main content from being visible below the overlay.
+					Unfortunately, iOS Safari doesn't currently play well with this
+					and will sometimes still scroll the page even though it shouldn't.
+					Once overscroll-behavior is properly supported, this should be fixed.
+				*/
+				:global(.mobile-sidebar-toggle) {
+					overflow: hidden;
+				}
+				:global(.mobile-sidebar-toggle #main-content) {
+					visibility: hidden;
+				}
+				:global(.mobile-sidebar-toggle #left-sidebar ul) {
+					overscroll-behavior: contain;
+				}
+			}
+			@media (min-width: 50em) {
+				#main-content {
+					margin-inline-start: var(--theme-left-sidebar-width);
+				}
+				#left-sidebar {
+					display: flex;
+					padding-inline-start: var(--min-spacing-inline);
+					padding-inline-end: 1rem;
+					top: var(--theme-navbar-height);
+					width: var(--theme-left-sidebar-width);
+					background: transparent;
+				}
+			}
+			@media (min-width: 72em) {
+				#main-content {
+					margin-inline-end: var(--theme-right-sidebar-width);
+				}
+				#right-sidebar {
+					display: flex;
+				}
+			}
+		</style>
+	</head>
+
+	<body>
+		<Header />
+		
+		{!hideRightSidebar && headings && headings.length !== 0 && <aside id="right-sidebar" class="sidebar rounded-md bg-slate-50/90 dark:bg-slate-800/90 z-10">
+			<RightSidebar headings={headings} />
+		</aside>}
+		<main>
+		<div id="parallax" style={{
+			backgroundImage: `url(${heroImage ? heroImage : "/blog/placeholder.png"})`,
+			backgroundSize: heroImage ? "cover" : "auto"}
+		}>			
+			<h1 class="font-bold scroll-mt-48 bg-slate-800/80 py-4 px-8 backdrop-blur-sm" id="overview" set:html={title}></h1>
+		</div>
+		<div class="container paper">
+			{
+				headings && headings.length !== 0 && (
+					<nav class="mobile-toc">
+						<TableOfContents
+							client:media="(max-width: 72em)"
+							headings={headings}
+							labels={{ onThisPage: ('On this page'), overview: ('Overview') }}
+							isMobile={true}
+						/>
+					</nav>
+				)
+			}
+			
+			<article>
+				<div class="flex">					
+					{pubDate && <time>{pubDate}</time>}
+					{updatedDate && <div>Last updated on <time>{updatedDate}</time></div>}
+					<div class="flex-grow"></div>
+					{minutesRead}
+				</div>
+				<hr/>
+				<slot />
+			</article>
+		</div>
+	</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	.mobile-toc {
+		display: block;
+		position: fixed;
+		inset-inline: 0;
+		top: calc(var(--theme-navbar-height));
+		z-index: 2;
+	}
+	@media (min-width: 50em) {
+		.mobile-toc {
+			inset-inline-start: 0;
+			margin-top: 0;
+		}
+	}
+	@media (min-width: 72em) {
+		article {
+			/* padding-top: calc(var(--theme-navbar-height) + var(--doc-padding-block)); */
+			/* padding-top: var(--doc-padding-block); */
+		}
+		.mobile-toc {
+			display: none;
+		}
+	}
+	#parallax {
+		height: 50vh;
+		max-height: 1000px;
+		overflow: hidden;
+		position: relative;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    display: flex;
+		justify-content: center;
+    align-items: center;
+    background-position: center center;
+		z-index: -50;
+	}
+	#overview {
+		color: rgb(217, 203, 177);
+	}
+</style>
+
+<script>
+  let windowScrollTop;
+  if (window.innerWidth >= 768) {
+    windowScrollTop = window.pageYOffset / 3;
+  } else {
+    windowScrollTop = 0;
+  }
+	let parallaxImage = document.querySelector<HTMLElement>("#parallax");
+	if (parallaxImage) {
+		parallaxImage.style.transform = "translate3d(0," + windowScrollTop + "px,0)";
+	}
+
+	let rightSidebar = document.querySelector<HTMLElement>("#right-sidebar");
+	if (rightSidebar && window.pageYOffset < window.innerHeight / 2) {
+		rightSidebar.style.top = (window.innerHeight / 2 - window.pageYOffset + 36) + "px";
+	}
+	var scrollHandler = function () {
+    var windowScrollTop = window.pageYOffset / 3;		
+		if (parallaxImage ) {
+			parallaxImage.style.transform = "translate3d(0," + windowScrollTop + "px,0)";
+		}
+		if (rightSidebar) {
+			if (window.pageYOffset < window.innerHeight / 2) {
+				rightSidebar.style.top = (window.innerHeight / 2 - window.pageYOffset + 36) + "px";
+			} else {
+				rightSidebar.style.top = "80px";
+			}
+		}
+	}
+	
+	window.addEventListener("scroll", scrollHandler);
+	window.onunload = function() {
+		window.removeEventListener("scroll", scrollHandler);
+	}
+</script>
+
