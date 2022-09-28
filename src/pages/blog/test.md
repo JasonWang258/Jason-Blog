@@ -2,10 +2,7 @@
 title: Install Astro with the Automatic CLI
 description: How to install Astro with NPM, PNPM, or Yarn via the create-astro CLI tool.
 layout: "../../layouts/BlogPost.astro"
-setup: | 
-  import InstallGuideTabGroup from '~/components/TabGroup/InstallGuideTabGroup.astro';
-  import PackageManagerTabs from '~/components/tabs/PackageManagerTabs.astro'
-i18nReady: true
+pubDate: "Jul 3 2022"
 ---
 Ready to install Astro? Follow our automatic or manual set-up guide to get started.
 

@@ -14,42 +14,50 @@ const posts = (await Astro.glob('./blog/*.{md,mdx}')).sort(
 <html lang="en">
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-		<style>
-			ul {
-				list-style-type: none;
-				padding: unset;
-			}
-			ul li {
-				display: flex;
-			}
-			ul li time {
-				flex: 0 0 130px;
-				font-style: italic;
-				color: #888;
-			}
-			ul li a:visited {
-				color: var(--secondary-color);
-			}
-		</style>
 	</head>
 	<body>
 		<Header />
 		<main class="container">
 			<section>
-				<ul>
 					{posts.map((post) => (
-						<li>
-							<time datetime={post.frontmatter.pubDate}>
+						<a href={post.url} class="text-neutral-700 dark:text-neutral-400">
+						<div class="
+							relative 
+							md:flex 
+							my-4 
+							rounded-lg 
+							bg-slate-200 
+							hover:bg-neutral-200
+							dark:bg-slate-900 
+							dark:hover:bg-neutral-900
+							md:after:content-['🚀'] 
+							md:after:text-6xl
+							md:after:absolute
+							md:after:w-10 
+							md:after:h-10 
+							md:after:right-10
+							md:after:bottom-8
+							md:after:-z-10
+							md:hover:after:-translate-y-16
+							md:hover:after:translate-x-16
+							md:hover:after:transition-transform
+							md:hover:after:ease-in-out 
+							md:hover:after:duration-300				
+						">
+							{ post.frontmatter.heroImage ? <img class="w-full md:w-48 lg:w-64 xl:w-72 h-auto object-cover" src={post.frontmatter.heroImage} alt="" /> : ""}
+							<div class="py-2 md:p-6 text-center md:text-left">
+								<h3>{post.frontmatter.title}</h3>
+								<p>{post.frontmatter.description}</p>
+							</div>
+							<time datetime={post.frontmatter.pubDate} class="absolute right-4 bottom-2 text-xs">
 								{new Date(post.frontmatter.pubDate).toLocaleDateString('en-us', {
 									year: 'numeric',
 									month: 'short',
 									day: 'numeric',
 								})}
 							</time>
-							<a href={post.url}>{post.frontmatter.title}</a>
-						</li>
+						</div></a>
 					))}
-				</ul>
 			</section>
 		</main>
 		<Footer />

@@ -1,8 +1,8 @@
 import { defineConfig } from "astro/config";
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
-import remarkGfm from "remark-gfm";
-import smartypants from "remark-smartypants";
+// import remarkGfm from "remark-gfm";
+// import smartypants from "remark-smartypants";
 import rehypeExternalLinks from "rehype-external-links";
 import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";

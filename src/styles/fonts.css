@@ -1,33 +1,4 @@
 @import "@fontsource/lato";
-@font-face {
-	font-family: 'RT Alias Medium';
-	font-style: normal;
-	font-weight: 400;
-	src: local(''), url('/assets/fonts/RTAliasMedium-Regular.woff2') format('woff2');
-	font-display: swap;
-}
-@font-face {
-	font-family: 'RT Alias Medium';
-	font-style: italic;
-	font-weight: 400;
-	src: local(''),
-		url('/assets/fonts/RTAliasMedium-RegularOblique.woff2') format('woff2');
-	font-display: swap;
-}
-@font-face {
-	font-family: 'RT Alias Medium';
-	font-style: normal;
-	font-weight: 700;
-	src: local(''), url('/assets/fonts/RTAliasMedium-Bold.woff2') format('woff2');
-	font-display: swap;
-}
-@font-face {
-	font-family: 'RT Alias Medium';
-	font-style: italic;
-	font-weight: 700;
-	src: local(''), url('/assets/fonts/RTAliasMedium-BoldOblique.woff2') format('woff2');
-	font-display: swap;
-}
 
 @font-face {
   font-family: 'Fira Mono';

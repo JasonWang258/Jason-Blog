@@ -61,7 +61,8 @@ const {
 				display: none;
 				top: var(--theme-navbar-height);
 				inset-inline-end: 0;
-				width: var(--theme-right-sidebar-width);
+				/* width: var(--theme-right-sidebar-width); */
+				@apply lg:w-48 2xl:w-72
 			}
 			#main-content {
 				display: flex;
@@ -128,8 +129,10 @@ const {
 		<div id="parallax" style={{
 			backgroundImage: `url(${heroImage ? heroImage : "/blog/placeholder.png"})`,
 			backgroundSize: heroImage ? "cover" : "auto"}
-		}>			
-			<h1 class="font-bold scroll-mt-48 bg-slate-800/80 py-4 px-8 backdrop-blur-sm" id="overview" set:html={title}></h1>
+		}>		
+			<div class="container">
+				<h1 class="inline-block font-bold scroll-mt-48 bg-slate-800/80 py-4 px-8 backdrop-blur-sm" id="overview" set:html={title}></h1>
+			</div>	
 		</div>
 		<div class="container paper">
 			{
@@ -193,7 +196,7 @@ const {
     padding: 0;
     border: 0;
     display: flex;
-		justify-content: center;
+		justify-content: flex-start;
     align-items: center;
     background-position: center center;
 		z-index: -50;
