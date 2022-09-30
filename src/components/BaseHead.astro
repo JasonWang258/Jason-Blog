@@ -38,13 +38,22 @@ const { title, description, image = '/placeholder-social.jpg' } = Astro.props;
 <meta property="twitter:description" content={description} />
 <meta property="twitter:image" content={new URL(image, Astro.url)} />
 
-<!-- This is intentionally inlined to avoid FOUC -->
-<script>
+<script is:inline>
+  // This code was migrated/copied from ThemToggleBotton to make the
+  // dark mode toggle instant, vs. hidden inside of a useEffect() call.
   const root = document.documentElement;
-  const theme = localStorage.getItem('theme');
-  if (theme === 'dark' || (!theme) && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-    root.classList.add('dark');
-  } else {
+  const theme = (() => {
+    if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+      return localStorage.getItem('theme');
+    }
+    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      return 'dark';
+    }
+    return 'light';
+  })();
+  if (theme === 'light') {
     root.classList.remove('dark');
+  } else {
+    root.classList.add('dark');
   }
 </script>

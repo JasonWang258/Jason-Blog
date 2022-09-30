@@ -117,6 +117,7 @@ const {
 				}
 			}
 		</style>
+		
 	</head>
 
 	<body>
@@ -128,8 +129,8 @@ const {
 		<main>
 		<div id="parallax" style={{
 			backgroundImage: `url(${heroImage ? heroImage : "/blog/placeholder.png"})`,
-			backgroundSize: heroImage ? "cover" : "auto"}
-		}>		
+			backgroundSize: heroImage ? "cover" : "auto"
+		}}>		
 			<div class="container">
 				<h1 class="inline-block font-bold scroll-mt-48 bg-slate-800/80 py-4 px-8 backdrop-blur-sm" id="overview" set:html={title}></h1>
 			</div>	

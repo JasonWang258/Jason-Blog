@@ -3,20 +3,25 @@ import * as React from "react";
 type Theme = "light" | "dark";
 
 export default function ButtonThemeToggle() {
-  const [theme, setTheme] = React.useState<Theme>("light");
+  const [theme, setTheme] = React.useState<Theme>(() => {
+		if (import.meta.env.SSR) {
+			return "dark";
+		}
+		return document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+	});
   const rootEl =
     typeof document !== "undefined" ? document.documentElement : null;
 
-  React.useEffect(() => {
-    if (typeof localStorage !== "undefined" && localStorage.getItem("theme")) {
-      setTheme(localStorage.getItem("theme") as Theme);
-    } else if (
-      typeof window !== "undefined" &&
-      window.matchMedia("(prefers-color-scheme: dark)").matches
-    ) {
-      setTheme("dark");
-    }
-  });
+  // React.useEffect(() => {
+  //   if (typeof localStorage !== "undefined" && localStorage.getItem("theme")) {
+  //     setTheme(localStorage.getItem("theme") as Theme);
+  //   } else if (
+  //     typeof window !== "undefined" &&
+  //     window.matchMedia("(prefers-color-scheme: dark)").matches
+  //   ) {
+  //     setTheme("dark");
+  //   }
+  // });
 
   React.useEffect(() => {
     if (rootEl && theme === "light") {
