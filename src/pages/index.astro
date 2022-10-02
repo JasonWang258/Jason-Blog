@@ -12,9 +12,19 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../config';
 	</head>
 	<body class="flex flex-col h-screen">
 		<Header title={SITE_TITLE} />
-		<main class="flex-grow bg-[url('/blog/placeholder.png')]">
+		<main class="
+			flex-grow 
+			bg-[url('/assets/images/snow.jpg')] 
+			bg-cover 
+			dark:after:content-['']
+			dark:after:absolute
+			dark:after:top-0
+			dark:after:w-full
+			dark:after:h-full
+			dark:after:bg-slate-800/60
+		">
 			<div class="container h-full flex items-center pb-24">
-				<h1 class="text-neutral-300 bg-slate-800/50 p-12">🧑‍🚀 Hello, Astronaut!</h1>
+				<h1 class="z-50">🧑‍🚀 Hello, Astronaut!</h1>
 			</div>
 		</main>
 	</body>
